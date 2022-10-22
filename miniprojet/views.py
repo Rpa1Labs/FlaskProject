@@ -84,7 +84,7 @@ class BookForm(FlaskForm):
     id = HiddenField('id')
 
     title = StringField('Titre', [
-        validators.InputRequired(),
+        validators.InputRequired('Le titre est obligatoire'),
         validators.Length(
             min=2,
             max=45,
@@ -93,16 +93,16 @@ class BookForm(FlaskForm):
 
     author_id = SelectField('Auteur',
                             coerce=int,
-                            validators=[validators.InputRequired()],
+                            validators=[validators.InputRequired('Veuillez choisir un auteur')],
                             choices=[],
                             validate_choice=False)
 
-    price = FloatField('Prix', [validators.InputRequired()])
+    price = FloatField('Prix', [validators.InputRequired('Veuillez mettre un prix')])
 
-    url = URLField('URL', [validators.InputRequired()])
+    url = URLField('URL', [validators.InputRequired('Veuillez mettre une URL'), validators.URL('URL invalide')])
 
     img = FileField(
-        'Image', validators=[FileAllowed(['jpg', 'png'], 'Images uniquement')])
+        'Image', validators=[FileAllowed(['jpg', 'png'], 'Images uniquement: jpg, png')])
 
     def validate_author_id(self, author_id):
         if not get_author(author_id.data):
@@ -141,9 +141,9 @@ class AdminForm(FlaskForm):
     - password: mot de passe de l'utilisateur (champ obligatoire)
     - email: email de l'utilisateur (champ obligatoire)
     """
-    username = StringField('username', [validators.InputRequired(), validators.Length(min=2, max=50), validators.Regexp(r'^[a-zA-Z0-9_]+$')])
-    password = PasswordField('Password', [ validators.Length(min=0, max=50, message="Le mot de passe doit faire au plus 50 caractères")])
-    email = StringField('Email', [validators.InputRequired()])
+    username = StringField('Nom d\'utilisateur', [validators.InputRequired('Nom d\'utilisateur obligatoire'), validators.Length(min=2, max=50, message='Le nom d\'utilisateur doit faire entre 2 et 50 caractères' ), validators.Regexp(r'^[a-zA-Z0-9_]+$', message='Le nom d\'utilisateur ne doit contenir que des lettres, des chiffres et des underscores')])
+    password = PasswordField('Mot de passe', [ validators.Length(min=0, max=50, message="Le mot de passe doit faire au plus 50 caractères")])
+    email = StringField('Email', [validators.InputRequired('Email obligatoire')])
 
 
 
@@ -409,6 +409,8 @@ def save_book():
         #On redirige vers la page du livre
         return redirect(url_for('details', id=b.id))
 
+    print(f.errors)
+
     #Si le formulaire n'est pas valide, on réaffiche la page d'édition
     f.author_id.choices = [(-1, "Choisissez un auteur")
                            ] + [(int(a.id), a.name) for a in get_authors()]
@@ -577,23 +579,13 @@ def save_admin():
     #On récupère le formulaire
     f = AdminForm()
 
-    #Si le nom d'utilisateur est vide, on affiche un message d'erreur
-    if f.username.data == "":
-        f.username.errors += ("Le nom d'utilisateur est obligatoire",)
-        return render_template("edit-adminBS.html", form=f)
-
-    #Si l'email est vide, on affiche un message d'erreur
-    if f.email.data == "":
-        f.email.errors += ("L'adresse email est obligatoire",)
-        return render_template("edit-adminBS.html", form=f)
+    #On récupère l'utilisateur dans la db
+    u = load_user(f.username.data)
 
     #Si l'email est déjà utilisé, on affiche un message d'erreur
     if get_user_by_mail(f.email.data):
         f.email.errors += ("Cette adresse email est déjà utilisée",)
         return render_template("edit-adminBS.html", form=f)
-
-    #On récupère l'utilisateur dans la db
-    u = load_user(f.username.data)
 
     #Si l'utilisateur n'existe pas, on le crée
     if u is None:
