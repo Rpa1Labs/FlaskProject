@@ -1,0 +1,37 @@
+{% extends "baseBS.html" %}
+
+{% block content %}
+<h1 > 
+    {% if form.username.data != ""  and isWrong is none %}Editer un admin : {{ form.username.data }}{% else %}Ajouter un admin{% endif %}
+</h1 >
+
+
+<div class="my-3 p-3 bg-white rounded box-shadow">
+    <form role="form" method ="POST" action ="{{ url_for('save_admin') }}">
+        {{ form.hidden_tag() }}
+        <div class = "form-group">
+                    {% if form.username.data != '' and isWrong is none %}
+                        {{ form.username(class_="d-none", type="hidden") }}
+                    {% else %}
+                        {{ form.username.label }} 
+                        {{ form.username(size=25, class_="form-control", required="required") }}
+                    {% endif %}
+                    {{ form.password.label }} 
+                    {{ form.password(size=25, class_="form-control") }}
+                    {{ form.email.label }} 
+                    {{ form.email(size=25, class_="form-control") }}
+        
+        </div>
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for field, errors in form.errors.items() %}
+                    {% for error in errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <input class ="mt-3 btn btn-success" type="submit" value ="Enregistrer">
+    </form>
+</div>
+{% endblock %}

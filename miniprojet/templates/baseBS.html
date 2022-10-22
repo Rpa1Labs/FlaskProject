@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        {% block head %}
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% block styles %}
+            <!-- Bootstrap CSS -->
+            {{ bootstrap.load_css() }}
+        {% endblock %}
+
+        <style>
+          footer{
+              position: fixed;
+              bottom: 0;
+              width: 100%;
+              z-index: 999;
+          }
+
+          main{
+            margin-top: 5em;
+            margin-bottom: 4em;
+          }
+
+          body{
+            background-color: #dbdbdb;
+          }
+        </style>
+
+        <title>Ma bibliothèque SF</title>
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            <!-- Fixed navbar -->
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+              <div class="container-fluid">
+                <img src="{{ url_for('static', filename='main-img.png') }}" alt="logo" width="30" height="30" class="d-inline-block align-text-top" style="margin-right:10px">
+                <a class="navbar-brand" href="{{ url_for('home') }}">My Books</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                  <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Livres</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="{{ url_for('authors') }}">Auteurs</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="/admins">Administrateurs</a>
+                    </li>
+                    {% endif %}
+                    
+
+                    {% block menu %}
+                    {% endblock %}
+
+                   
+                  </ul>
+                  {% if current_user.is_authenticated %}
+                  <a href="/logout/"><button class="btn btn-outline-danger" style="margin: 5px; ; margin-right: 0;">Logout</button></a>
+                  {% else %}
+                  <a href="/login/"><button class="btn btn-outline-light" style="margin: 5px; margin-left: 0;">Login</button></a>
+                  {% endif %}
+                </div>
+              </div>
+            </nav>
+          </header>
+        <!-- Your page content -->
+        <main role="main" class="container">
+        {% block content %}
+        
+        {% endblock %}
+      </main>
+        <footer class="footer mt-auto py-3 bg-light">
+            <div class="container">
+              <span class="text-muted">Site web fait en Bootstrap et en Flask par Romain PAJON</span>
+            </div>
+          </footer>
+        {% block scripts %}
+            <!-- Optional JavaScript -->
+            {{ bootstrap.load_js() }}
+        {% endblock %}
+    </body>
+</html>

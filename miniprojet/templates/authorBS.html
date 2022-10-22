@@ -1,0 +1,50 @@
+{% extends 'baseBS.html' %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='home.css')}}"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='details.css')}}"> 
+{% endblock %}
+
+{% block menu %}
+<li class="nav-item">
+    <a class="nav-link disables" >{{ author.name }}</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<h1>{{author.name}}</h1>
+<div class="row">
+
+    {% for x in books %}
+    <div class="col-md-3">
+        <div class="card mb-3 box-shadow">
+            <div style="flex: fit-content">
+                <div class="card-img-top book-cover-image" style="background-image: url('{{ url_for('static', filename='images/'+x.img) }}');" ></div>
+            </div>
+            <div class="card-body">
+            <p class="card-text" style="height: 70px;">{{ x.title }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group d-flex justify-content-center flex-wrap">
+                    <a href="{{ url_for('details', id=x.id) }}"><button type="button" class="align-self-stretch btn btn-sm btn-outline-secondary">Détails</button></a>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('edit_book', id=x.id) }}"><button type="button" class="btn btn-sm btn-outline-info btn-outline-secondary">Modifier</button></a></a>
+                        <a href="{{ url_for('remove_book', id=x.id) }}"><button type="button" class="btn btn-sm btn-outline-danger btn-outline-secondary">Supprimer</button></a></a>
+                    {% endif %}
+                </div>
+                <small class="text-muted">{{ x.price }}€</small>
+            </div>
+            </div>
+        </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% if current_user.is_authenticated %}
+<a href="{{ url_for('edit_book', a=author.id) }}" class="add-button" title="Ajouter un livre">+</a>
+{% endif %}
+
+{% endblock %}
+
+
+

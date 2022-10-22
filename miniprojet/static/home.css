@@ -1,0 +1,29 @@
+h1{
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+div.sample{
+    text-align: center;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+
+.col-md-3{
+    padding-bottom: 15px;
+}
+
+.card.mb-3.box-shadow {
+    height: 100%;
+  }
+
+.book-cover-image{
+    height: 250px;
+    background-color: #bbbbbb;
+    background-position: 50% 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+}

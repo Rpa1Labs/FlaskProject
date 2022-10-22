@@ -1,0 +1,32 @@
+{% extends "baseBS.html" %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='login.css')}}"> 
+{% endblock %}
+
+{% block content %}
+
+<div class="my-3 p-3 bg-white rounded box-shadow form-signin">
+  <form class="d-flex flex-column" role="form" method ="POST" action ="{{ url_for('login') }}">
+      {{ form.hidden_tag() }}
+      <img class="mb-4 align-self-center" src="{{ url_for('static', filename='login.svg')}}" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal align-self-center">Veuillez vous connecter</h1>
+      <label for="inputUser" class="sr-only">{{ form.username.label }}</label>
+      {{ form.username(size=50, class_="form-control inputUser", placeholder="Nom d\'utilisateur") }}
+      <label for="inputPassword" class="sr-only">{{ form.password.label }}</label>
+      {{ form.password(size=50, class_="form-control inputPassword", placeholder ="Mot de passe") }}
+      <button class="btn btn-lg btn-primary btn-block mt-3 align-self-center align-items-stretch" type="submit">Se connecter</button>
+      {% if form.errors %}
+          <div class="alert alert-danger div-alert" role="alert">
+              {% for field, errors in form.errors.items() %}
+                  {% for error in errors %}
+                      <p class="text-alert">{{ error }}</p>
+                  {% endfor %}
+              {% endfor %}
+          </div>
+      {% endif %}
+    </form>
+  </div>
+
+{% endblock %}

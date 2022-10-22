@@ -1,0 +1,47 @@
+{% extends 'baseBS.html' %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='details.css')}}"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='admin.css')}}"> 
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex align-items-center p-3 my-3 text-white-50 rounded box-shadow" style="background: linear-gradient(45deg,#4dd8df,#4d94df);">
+    <img class="mr-3" src="{{ url_for('static', filename='author.svg')}}" alt="" width="48" height="48" style="margin-right: 10px;">
+    <div class="lh-100">
+      <h6 class="mb-0 text-white lh-100">Liste des administrateurs</h6>
+    </div>
+</div>
+
+<div class="my-3 p-3 bg-white rounded box-shadow">
+    
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Nom d'utilisateur</th>
+        <th scope="col" class="table-fit">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for admin in admins %}
+      <tr>
+        <td>{{ admin.username }}</td>
+        <td class="table-fit">
+          <a href="{{ url_for('edit_admin', username=admin.username) }}"><button type="button" class="btn btn-sm btn-info btn-secondary">Modifier</button></a></a>
+          <a href="{{ url_for('remove_admin', username=admin.username) }}"><button type="button" class="btn btn-sm btn-danger btn-secondary">Supprimer</button></a></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+
+{% if current_user.is_authenticated %}
+<a href="{{ url_for('edit_admin', id=none) }}" class="add-button" title="Ajouter un admin">+</a>
+{% endif %}
+
+{% endblock %}

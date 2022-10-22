@@ -1,0 +1,37 @@
+{% extends "baseBS.html" %}
+
+{% block content %}
+<h1 > 
+    {% if form.title.data != '' %}Editer un livre : {{ form.title.data }}{% else %}Ajouter un livre{% endif %}
+</h1 >
+<div class="my-3 p-3 bg-white rounded box-shadow">
+    <form role="form" method ="POST" action ="{{ url_for('save_book') }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class = {% if form.title.errors %}
+                        "form-group has-error"
+                    {% else %}
+                        "form-group"
+                    {% endif %}>
+        
+                    {{ form.title.label }} 
+                    {{ form.title(size=25, class_="form-control") }}
+                    {{ form.author_id.label }} 
+                    {{ form.author_id(class_="form-control") }}
+                    {{ form.price.label }} 
+                    {{ form.price(size=25, class_="form-control") }}
+                    {{ form.url.label }}
+                    {{ form.url(size=25, class_="form-control") }}
+                    {{ form.img.label }} 
+                    {{ form.img(size=25, class_="form-control") }}
+        </div>
+        {% if form.error %}
+        <ul class ="list-group">
+        {% for e in form.errors %}
+        <li class ="list-group-item list-group-item-danger " >{{ e }} </li >
+        {% endfor %}
+        </ul >
+        {% endif %}
+        <input class ="mt-3 btn btn-success" type="submit" value ="Enregistrer">
+    </form>
+</div>
+{% endblock %}
