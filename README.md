@@ -24,12 +24,24 @@ Ensuite, il faut cloner le projet :
 git clone https://github.com/Rpa1Labs/FlaskProject
 ```
 
-Enfin, il faut installer les dépendances du projet :
+Il faut installer les dépendances du projet :
 
 ```bash
 cd FlaskProject
 pip3 install -r requirements.txt
 ```
+
+Il faut créer la base de données :
+
+```bash
+python3 -m flask syncdb
+```
+
+Enfin, il faut créer un utilisateur :
+
+```bash
+python3 -m flask newuser <username> <password>
+``` 
 
 ## Lancement
 
