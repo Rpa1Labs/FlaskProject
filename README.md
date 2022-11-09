@@ -57,6 +57,23 @@ Si vous souhaitez que le projet soit accessible depuis un autre ordinateur, il f
 python3 -m flask run --host 0.0.0.0
 ```
 
+Vous pouvez ajouter des livres sous le format suivant :
+
+```yaml
+- author: Auteur
+  img: nom_de_l_image.jpg
+  price: 10.00
+  title: Titre
+  url: https://url_du_livre.com
+```
+
+Pour les ajouter, il faut dans un premier temps mettre les images dans le dossier `static/images` et ensuite éxécuter la commande suivante :
+
+```bash
+python3 -m flask loaddb <fichier yaml>
+```
+
+
 ## Utilisation
 
 Si vous lancez le projet sur votre ordinateur, vous pouvez vous rendre sur l'adresse suivante : [http://localhost:5000](http://localhost:5000)
